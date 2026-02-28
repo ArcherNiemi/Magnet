@@ -1,6 +1,7 @@
 import pygame
 import sys 
 import time
+from levels import getLevel
 
 pygame.init()
 
@@ -25,105 +26,6 @@ blocks = []
 walls = []
 springs = []
 
-class block:
-    def __init__(self, x, y, width, height, color, speed, friction):
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
-        self.color = color
-        self.speed = speed / 100
-        self.friction = friction / 100
-        self.momentumX = 0
-        self.momentumY = 0
-    
-    def draw(self):
-        pygame.draw.rect(screen, self.color, pygame.Rect(round(self.x), round(self.y), self.width, self.height))
-    
-    def move(self):
-        self.x += self.momentumX
-        self.y += self.momentumY
-        if (self.momentumX > 0):
-            self.momentumX -= self.friction
-            if(self.momentumX < 0):
-                self.momentumX = 0
-        elif(self.momentumX < 0):
-            self.momentumX += self.friction
-            if(self.momentumX > 0):
-                self.momentumX = 0
-        if (self.momentumY > 0):
-            self.momentumY -= self.friction
-            if(self.momentumY < 0):
-                self.momentumY = 0
-        elif(self.momentumY < 0):
-            self.momentumY += self.friction
-            if(self.momentumY > 0):
-                self.momentumY = 0
-
-    def movementUpdate(self, mouseX, mouseY):
-        distanceX = self.x - mouseX
-        distanceY = self.y - mouseY
-
-        self.momentumX -= self.speed * distanceX
-        self.momentumY -= self.speed * distanceY
-
-    def checkBounds(self):
-        if(self.x < 0 or self.x + self.width > SCREEN_WIDTH):
-            self.momentumX = -self.momentumX
-        if(self.y < 0 or self.y + self.height > SCREEN_HEIGHT):
-            self.momentumY = -self.momentumY
-        
-        for i in range(len(walls)):
-            if(self.y + self.height > walls[i].y and self.y < walls[i].y + walls[i].height and self.x + self.width > walls[i].x and self.x < walls[i].x + walls[i].width):
-                if(walls[i].type == "y"):
-                    self.momentumY = -self.momentumY
-                elif(walls[i].type == "x"):
-                    self.momentumX = -self.momentumX
-        
-        for i in range(len(springs)):
-            if(self.y + self.height > springs[i].y and self.y < springs[i].y + springs[i].height and self.x + self.width > springs[i].x and self.x < springs[i].x + springs[i].width):
-                if(springs[i].type == "l"):
-                    self.momentumX = -springs[i].power
-                elif(springs[i].type == "r"):
-                    self.momentumX = springs[i].power
-                elif(springs[i].type == "u"):
-                    self.momentumY = -springs[i].power
-                elif(springs[i].type == "d"):
-                    self.momentumY = springs[i].power
-
-class end:
-    def __init__(self, x, y, width, height):
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
-    
-    def draw(self):
-        pygame.draw.rect(screen, "green", pygame.Rect(self.x, self.y, self.width, self.height))
-
-class wall:
-    def __init__(self,x,y,width,height, type):
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
-        self.type = type
-    
-    def draw(self):
-        pygame.draw.rect(screen, "black", pygame.Rect(self.x, self.y, self.width, self.height))
-
-class spring:
-    def __init__(self,x,y,width,height,power, type):
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
-        self.power = power
-        self.type = type
-    
-    def draw(self):
-        pygame.draw.rect(screen, "orange", pygame.Rect(self.x, self.y, self.width, self.height))
-
 def draw(endArea):
     screen.fill(BLUE)
 
@@ -140,37 +42,10 @@ def draw(endArea):
 
     pygame.display.flip()
 
-def main():
+def main(level):
+    setUpLevel(level)
+
     currentTime = 0
-    level = "level tate"
-    # blocks.append(block(100, 100, 40, 40, "red", 0.02, 0.2))
-    if(level == "level 1"):
-        blocks.append(block(100, 100, 20, 20, "green", 0.1, 3))
-
-        walls.append(wall(500, 200, 300, 5, "y"))
-        walls.append(wall(500, 400, 200, 5, "y"))
-        walls.append(wall(500, 200, 5, 200, "x"))
-        walls.append(wall(300, 300, 5, 300, "x"))
-
-        springs.append(spring(480, 300, 20, 40, 15, "l"))
-        springs.append(spring(500, 580, 40, 20, 15, "u"))
-        springs.append(spring(305, 400, 20, 40, 15, "r"))
-
-        endArea = end(750,250,50,100)
-    elif(level == "level tate"):
-        blocks.append(block(75, 75, 20, 20, "white", 0.1, 3))
-
-        walls.append(wall(0, 150, 600, 5, "y"))
-        walls.append(wall(450, 150, 5, 300, "x"))
-        walls.append(wall(600, 300, 5, 300, "x"))
-        walls.append(wall(150, 445, 300, 5, "y"))
-
-        springs.append(spring(780, 150, 20, 40, 20, "l"))
-        springs.append(spring(0, 400, 20, 40, 20, "r"))
-
-        endArea = end(375,275,50,50)
-
-
     timerGoing = False
 
     running = True
@@ -222,6 +97,17 @@ def resetGame():
     walls = []
     springs = []
     main()
+
+def setUpLevel(level):
+    global blocks
+    global walls
+    global springs
+    global endArea
+    selectedLevel = getLevel(level)
+    blocks = selectedLevel[0]
+    walls = selectedLevel[1]
+    springs = selectedLevel[2]
+    endArea = selectedLevel[3]
 
 if __name__ == "__main__":
     main()
