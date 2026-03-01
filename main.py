@@ -25,6 +25,7 @@ ENDGAME_FONT = pygame.font.SysFont("Arial", 36)
 blocks = []
 walls = []
 springs = []
+currentLevel = ""
 
 def draw(endArea):
     screen.fill(BLUE)
@@ -43,7 +44,9 @@ def draw(endArea):
     pygame.display.flip()
 
 def main(level):
-    setUpLevel(level)
+    global currentLevel
+    currentLevel = level
+    setUpLevel()
 
     currentTime = 0
     timerGoing = False
@@ -90,20 +93,14 @@ def endGameScreen(endTime):
     resetGame()
 
 def resetGame():
-    global blocks
-    global walls
-    global springs
-    blocks = []
-    walls = []
-    springs = []
-    main("level 1")
+    main(currentLevel)
 
-def setUpLevel(level):
+def setUpLevel():
     global blocks
     global walls
     global springs
     global endArea
-    selectedLevel = getLevel(level)
+    selectedLevel = getLevel(currentLevel)
     blocks = selectedLevel[0]
     walls = selectedLevel[1]
     springs = selectedLevel[2]
