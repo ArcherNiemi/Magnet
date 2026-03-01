@@ -2,6 +2,7 @@ import pygame
 import sys 
 import time
 from levels import getLevel
+import pandas as pd
 
 pygame.init()
 
@@ -29,6 +30,7 @@ walls = []
 springs = []
 levelBox = []
 currentLevel = ""
+currentName = ""
 
 cameraPos = [100, 100]
 
@@ -48,9 +50,12 @@ def draw(endArea):
 
     pygame.display.flip()
 
-def main(level):
+def main(level, name):
     global currentLevel
+    global currentName
     currentLevel = level
+    currentName = name
+
     setUpLevel()
 
     currentTime = 0
@@ -98,12 +103,13 @@ def endGameScreen(endTime):
     endTimeText = ENDGAME_FONT.render(f"time: {endTime}", 1, "black")
     screen.blit(endTimeText, (SCREEN_WIDTH / 2 - endTimeText.get_width() / 2, 250))
     pygame.display.flip()
+    saveTime(endTime)
     time.sleep(1)
     resetGame()
 
 def resetGame():
     print("nowhere")
-    main(currentLevel)
+    main(currentLevel, currentName)
 
 def setUpLevel():
     global blocks
@@ -133,6 +139,20 @@ def cameraSmoothing():
     distanceY = cameraPos[1] - blocks[0].y + SCREEN_HEIGHT /2
     cameraPos[0] -= distanceX / CAMERA_SMOOTHING
     cameraPos[1] -= distanceY / CAMERA_SMOOTHING
+
+def saveTime(time):
+    file_path = "data.csv"
+    df = pd.read_csv(file_path)
+
+    mask = (df["level"] == currentLevel) & (df["name"] == currentName)
+
+    if mask.any():
+        if time < df.loc[mask, "highscore"].iloc[0]:
+            df.loc[mask, "highscore"] = time
+    else:
+        df.loc[len(df)] = [currentLevel, currentName, time]
+
+    df.to_csv(file_path, index=False)
 
 if __name__ == "__main__":
     main("level 1")

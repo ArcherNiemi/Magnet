@@ -26,7 +26,7 @@ def getLevel(level):
 
         levelBox = [800,600]
 
-    elif(level == "level tate"):
+    elif(level == "level 2"):
         blocks.append(block(75, 75, 20, 20, "white", 0.2, 10))
 
         walls.append(wall(0, 150, 600, 5, "y"))
