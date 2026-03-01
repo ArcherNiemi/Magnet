@@ -96,7 +96,7 @@ def resetGame():
     blocks = []
     walls = []
     springs = []
-    main()
+    main("level 1")
 
 def setUpLevel(level):
     global blocks
@@ -110,4 +110,4 @@ def setUpLevel(level):
     endArea = selectedLevel[3]
 
 if __name__ == "__main__":
-    main()
+    main("level 1")
