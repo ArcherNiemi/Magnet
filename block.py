@@ -1,8 +1,8 @@
 import main
 import pygame
 
-SPEED_CAP = 20
-SPEED_LIMIT = 15
+SPEED_CAP = 16
+SPEED_LIMIT = 12
 SPEED_LIMIT_REDUCTION = 3
 DISTANCE_CAP = 300
 
@@ -44,6 +44,14 @@ class block:
     def movementUpdate(self, mouseX, mouseY):
         distanceX = self.x - mouseX
         distanceY = self.y - mouseY
+        if(distanceX < 0):
+            distanceX -= 20
+        else:
+            distanceX += 20
+        if(distanceY < 0):
+            distanceY -= 20
+        else:
+            distanceY += 20
 
         if(abs(distanceX) + abs(distanceY) > DISTANCE_CAP):
             proportionX = distanceX / (abs(distanceX) + abs(distanceY))

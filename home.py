@@ -16,6 +16,8 @@ TITLE_SPACING = 100
 FONT_TITLE = pygame.font.SysFont("arial", 70)
 FONT_BOX = pygame.font.SysFont("arial", 35)
 
+name = ""
+
 def draw():
     screen.fill(LIGHT_BLUE)
 

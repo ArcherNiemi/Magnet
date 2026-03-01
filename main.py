@@ -21,6 +21,8 @@ LIGHT_BLUE = (110, 188, 224)
 
 ENDGAME_FONT = pygame.font.SysFont("Arial", 36)
 
+CAMERA_SMOOTHING = 10
+
 
 blocks = []
 walls = []
@@ -80,11 +82,10 @@ def main(level):
             blocks[i].speedCap()
             blocks[i].move()
             blocks[i].checkBounds(levelBox)
-            cameraPos[0] = blocks[i].x - SCREEN_WIDTH/2
-            cameraPos[1] = blocks[i].y - SCREEN_HEIGHT/2
             if(endArea.x < blocks[i].x + blocks[i].width and endArea.x + endArea.width > blocks[i].x and endArea.y < blocks[i].y + blocks[i].height and endArea.y + endArea.height > blocks[i].y):
                 endGameScreen(round(currentTime,2))
                 running = False
+        cameraSmoothing()
         adjustCamera()
         if(timerGoing):
             currentTime += 1/FPS
@@ -126,6 +127,12 @@ def adjustCamera():
         cameraPos[1] = 0
     elif(cameraPos[1] > levelBox[1] - SCREEN_HEIGHT):
         cameraPos[1] = levelBox[1] - SCREEN_HEIGHT
+
+def cameraSmoothing():
+    distanceX = cameraPos[0] - blocks[0].x + SCREEN_WIDTH /2
+    distanceY = cameraPos[1] - blocks[0].y + SCREEN_HEIGHT /2
+    cameraPos[0] -= distanceX / CAMERA_SMOOTHING
+    cameraPos[1] -= distanceY / CAMERA_SMOOTHING
 
 if __name__ == "__main__":
     main("level 1")
