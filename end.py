@@ -8,5 +8,5 @@ class end:
         self.width = width
         self.height = height
     
-    def draw(self):
-        pygame.draw.rect(main.screen, "green", pygame.Rect(self.x, self.y, self.width, self.height))
+    def draw(self, cameraPos):
+        pygame.draw.rect(main.screen, "green", pygame.Rect(self.x - cameraPos[0], self.y - cameraPos[1], self.width, self.height))

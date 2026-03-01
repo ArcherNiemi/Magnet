@@ -7,7 +7,7 @@ pygame.init()
 LIGHT_BLUE = (100, 150, 255)
 BLUE = (0,0,255)
 
-LEVELS = [["level 1", 1], ["level tate", 2]]
+LEVELS = [["level 1", 1], ["level tate", 2], ["level 3", 3]]
 
 LEVEL_BOX_SIZE = 110
 SPACING = 20

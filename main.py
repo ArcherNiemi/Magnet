@@ -25,21 +25,24 @@ ENDGAME_FONT = pygame.font.SysFont("Arial", 36)
 blocks = []
 walls = []
 springs = []
+levelBox = []
 currentLevel = ""
+
+cameraPos = [100, 100]
 
 def draw(endArea):
     screen.fill(BLUE)
 
-    endArea.draw()
+    endArea.draw(cameraPos)
 
     for i in range(len(walls)):
-        walls[i].draw()
+        walls[i].draw(cameraPos)
 
     for i in range(len(springs)):
-        springs[i].draw()
+        springs[i].draw(cameraPos)
 
     for i in range(len(blocks)):
-        blocks[i].draw()
+        blocks[i].draw(cameraPos)
 
     pygame.display.flip()
 
@@ -71,15 +74,18 @@ def main(level):
             timerGoing = True
             mousePos = pygame.mouse.get_pos()
             for i in range(len(blocks)):
-                blocks[i].movementUpdate(mousePos[0], mousePos[1])
+                blocks[i].movementUpdate(mousePos[0] + cameraPos[0], mousePos[1] + cameraPos[1])
 
         for i in range(len(blocks)):
             blocks[i].speedCap()
             blocks[i].move()
-            blocks[i].checkBounds()
+            blocks[i].checkBounds(levelBox)
+            cameraPos[0] = blocks[i].x - SCREEN_WIDTH/2
+            cameraPos[1] = blocks[i].y - SCREEN_HEIGHT/2
             if(endArea.x < blocks[i].x + blocks[i].width and endArea.x + endArea.width > blocks[i].x and endArea.y < blocks[i].y + blocks[i].height and endArea.y + endArea.height > blocks[i].y):
                 endGameScreen(round(currentTime,2))
                 running = False
+        adjustCamera()
         if(timerGoing):
             currentTime += 1/FPS
         draw(endArea)
@@ -103,11 +109,23 @@ def setUpLevel():
     global walls
     global springs
     global endArea
+    global levelBox
     selectedLevel = getLevel(currentLevel)
     blocks = selectedLevel[0]
     walls = selectedLevel[1]
     springs = selectedLevel[2]
     endArea = selectedLevel[3]
+    levelBox = selectedLevel[4]
+
+def adjustCamera():
+    if(cameraPos[0] < 0):
+        cameraPos[0] = 0
+    elif(cameraPos[0] > levelBox[0] - SCREEN_WIDTH):
+        cameraPos[0] = levelBox[0] - SCREEN_WIDTH
+    if(cameraPos[1] < 0):
+        cameraPos[1] = 0
+    elif(cameraPos[1] > levelBox[1] - SCREEN_HEIGHT):
+        cameraPos[1] = levelBox[1] - SCREEN_HEIGHT
 
 if __name__ == "__main__":
     main("level 1")

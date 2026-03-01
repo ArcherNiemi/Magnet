@@ -23,6 +23,8 @@ def getLevel(level):
 
         endArea = end(750,250,50,100)
 
+        levelBox = [800,600]
+
     elif(level == "level tate"):
         blocks.append(block(75, 75, 20, 20, "white", 0.2, 10))
 
@@ -35,5 +37,12 @@ def getLevel(level):
         springs.append(spring(0, 400, 20, 40, 20, "r"))
 
         endArea = end(375,275,50,50)
+
+        levelBox = [800,600]
     
-    return [blocks, walls, springs, endArea]
+    elif(level == "level 3"):
+        blocks.append(block(100, 100, 20, 20, "white", 0.2, 10))
+        endArea = end(375,275,50,50)
+        levelBox = [1000, 800]
+    
+    return [blocks, walls, springs, endArea, levelBox]
