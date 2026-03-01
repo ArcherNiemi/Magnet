@@ -51,15 +51,19 @@ def main(level):
     currentTime = 0
     timerGoing = False
 
+    print("there")
     running = True
     while running:
         deltaTime = clock.tick(FPS)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+                pygame.quit()
+                sys.exit()
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_r:
+                if event.key == pygame.K_ESCAPE:
                     running = False
+                if event.key == pygame.K_r:
                     resetGame()
     
         mouseButtons = pygame.mouse.get_pressed()
@@ -70,6 +74,7 @@ def main(level):
                 blocks[i].movementUpdate(mousePos[0], mousePos[1])
 
         for i in range(len(blocks)):
+            blocks[i].speedCap()
             blocks[i].move()
             blocks[i].checkBounds()
             if(endArea.x < blocks[i].x + blocks[i].width and endArea.x + endArea.width > blocks[i].x and endArea.y < blocks[i].y + blocks[i].height and endArea.y + endArea.height > blocks[i].y):
@@ -78,9 +83,6 @@ def main(level):
         if(timerGoing):
             currentTime += 1/FPS
         draw(endArea)
-    
-    pygame.quit()
-    sys.exit()
 
 def endGameScreen(endTime):
     pygame.draw.rect(screen, LIGHT_BLUE, pygame.Rect(250, 100, 300, 400))
@@ -93,6 +95,7 @@ def endGameScreen(endTime):
     resetGame()
 
 def resetGame():
+    print("nowhere")
     main(currentLevel)
 
 def setUpLevel():

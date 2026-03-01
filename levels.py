@@ -10,7 +10,7 @@ def getLevel(level):
     print(level)
 
     if(level == "level 1"):
-        blocks.append(block(100, 100, 20, 20, "white", 0.1, 3))
+        blocks.append(block(100, 100, 20, 20, "white", 0.2, 10))
 
         walls.append(wall(500, 200, 300, 5, "y"))
         walls.append(wall(500, 400, 200, 5, "y"))
@@ -24,7 +24,7 @@ def getLevel(level):
         endArea = end(750,250,50,100)
 
     elif(level == "level tate"):
-        blocks.append(block(75, 75, 20, 20, "white", 0.1, 3))
+        blocks.append(block(75, 75, 20, 20, "white", 0.2, 10))
 
         walls.append(wall(0, 150, 600, 5, "y"))
         walls.append(wall(450, 150, 5, 300, "x"))

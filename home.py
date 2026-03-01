@@ -41,7 +41,6 @@ def draw():
         if(count >= len(LEVELS)):
             drawBoxes = False
         
-
     pygame.display.flip()
 
 def run():
@@ -51,26 +50,24 @@ def run():
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
-                for i in range(len(LEVELS)):
-                    if(event.pos):
-                        clickBoxes = True
+                clickBoxes = True
+                x = SPACING
+                y = TITLE_SPACING
+                count = 0
+                while(clickBoxes):
+                    pygame.draw.rect(screen, BLUE, pygame.Rect(x, y, LEVEL_BOX_SIZE,LEVEL_BOX_SIZE))
+                    if(x <= event.pos[0] and x + LEVEL_BOX_SIZE >= event.pos[0] and y <= event.pos[1] and y + LEVEL_BOX_SIZE >= event.pos[1]):
+                        main.main(LEVELS[count][0])
+                        break
+
+                    x += LEVEL_BOX_SIZE + SPACING
+                    if (x + LEVEL_BOX_SIZE > SCREEN_WIDTH):
                         x = SPACING
-                        y = TITLE_SPACING
-                        count = 0
-                        while(clickBoxes):
-                            pygame.draw.rect(screen, BLUE, pygame.Rect(x, y, LEVEL_BOX_SIZE,LEVEL_BOX_SIZE))
-                            if(x <= event.pos[0] and x + LEVEL_BOX_SIZE >= event.pos[0] and y <= event.pos[1] and y + LEVEL_BOX_SIZE >= event.pos[1]):
-                                main.main(LEVELS[count][0])
-                                break
+                        y += LEVEL_BOX_SIZE + SPACING
 
-                            x += LEVEL_BOX_SIZE + SPACING
-                            if (x + LEVEL_BOX_SIZE > SCREEN_WIDTH):
-                                x = SPACING
-                                y += LEVEL_BOX_SIZE + SPACING
-
-                            count += 1
-                            if(count >= len(LEVELS)):
-                                clickBoxes = False
+                    count += 1
+                    if(count >= len(LEVELS)):
+                        clickBoxes = False
         
         draw()
 
