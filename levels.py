@@ -7,7 +7,6 @@ def getLevel(level):
     blocks = []
     walls = []
     springs = []
-    print(level)
 
     if(level == "level 1"):
         blocks.append(block(100, 100, 20, 20, "white", 0.2, 10))

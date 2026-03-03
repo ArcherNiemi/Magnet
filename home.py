@@ -1,5 +1,6 @@
 import main
 import pygame
+import pandas as pd
 from main import screen, SCREEN_HEIGHT, SCREEN_WIDTH
 
 pygame.init()
@@ -17,6 +18,7 @@ TITLE_SPACING = 100
 FONT_TITLE = pygame.font.SysFont("arial", 70)
 FONT_BOX = pygame.font.SysFont("arial", 35)
 FONT_NAME = pygame.font.SysFont("arial", 25)
+FONT_LEADER_BOARD = pygame.font.SysFont("arial", 40)
 
 name = "something"
 
@@ -69,7 +71,6 @@ def run():
                     y = TITLE_SPACING
                     count = 0
                     while(clickBoxes):
-                        pygame.draw.rect(screen, BLUE, pygame.Rect(x, y, LEVEL_BOX_SIZE,LEVEL_BOX_SIZE))
                         if(x <= event.pos[0] and x + LEVEL_BOX_SIZE >= event.pos[0] and y <= event.pos[1] and y + LEVEL_BOX_SIZE >= event.pos[1]):
                             main.main(LEVELS[count][0], name)
                             break
@@ -83,13 +84,58 @@ def run():
                         if(count >= len(LEVELS)):
                             clickBoxes = False
 
-            if(typeingName and event.type == pygame.KEYDOWN):
-                if(event.key == pygame.K_BACKSPACE):
-                    name = name[:-1]
-                else:
-                    name += pygame.key.name(event.key)
-        
+            if(event.type == pygame.KEYDOWN):
+                if(typeingName):
+                    if(event.key == pygame.K_BACKSPACE):
+                        name = name[:-1]
+                    else:
+                        name += pygame.key.name(event.key)
+                elif(event.key == pygame.K_l):
+                    checkLeaderBoard()
         draw()
+
+def checkLeaderBoard():
+    mousePos = pygame.mouse.get_pos()
+    clickBoxes = True
+    x = SPACING
+    y = TITLE_SPACING
+    count = 0
+    while(clickBoxes):
+        if(x <= mousePos[0] and x + LEVEL_BOX_SIZE >= mousePos[0] and y <= mousePos[1] and y + LEVEL_BOX_SIZE >= mousePos[1]):
+            showLeaderBoard(LEVELS[count][0])
+            break
+
+        x += LEVEL_BOX_SIZE + SPACING
+        if (x + LEVEL_BOX_SIZE > SCREEN_WIDTH):
+            x = SPACING
+            y += LEVEL_BOX_SIZE + SPACING
+
+        count += 1
+        if(count >= len(LEVELS)):
+            clickBoxes = False
+
+def showLeaderBoard(name):
+    run = True
+    while(run):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+            if event.type == pygame.KEYDOWN:
+                if(event.key == pygame.K_l):
+                    run = False
+
+        screen.fill(LIGHT_BLUE)
+        titleText = FONT_TITLE.render(name, 1, "black")
+        screen.blit(titleText, (SCREEN_WIDTH / 2 - titleText.get_width()/2, TITLE_SPACING/2 - titleText.get_height()/2))
+        df = pd.read_csv('data.csv')
+        nameList = df[df["level"] == name]["name"].tolist()
+        timeList = df[df["level"] == name]["highScore"].tolist()
+        combiedList = zip(timeList, nameList)
+        sortedList = sorted(combiedList)
+        for i in range(len(sortedList)):
+            leaderBoardText = FONT_LEADER_BOARD.render(f"{sortedList[i][1]}: {sortedList[i][0]}", 1, "black")
+            screen.blit(leaderBoardText, (20, (leaderBoardText.get_height() + 20)*i + 100))
+        pygame.display.flip()
 
 if __name__ == "__main__":
     run()

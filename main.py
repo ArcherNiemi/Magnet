@@ -61,7 +61,6 @@ def main(level, name):
     currentTime = 0
     timerGoing = False
 
-    print("there")
     running = True
     while running:
         deltaTime = clock.tick(FPS)
@@ -108,7 +107,6 @@ def endGameScreen(endTime):
     resetGame()
 
 def resetGame():
-    print("nowhere")
     main(currentLevel, currentName)
 
 def setUpLevel():
@@ -147,8 +145,8 @@ def saveTime(time):
     mask = (df["level"] == currentLevel) & (df["name"] == currentName)
 
     if mask.any():
-        if time < df.loc[mask, "highscore"].iloc[0]:
-            df.loc[mask, "highscore"] = time
+        if time < df.loc[mask, "highScore"].iloc[0]:
+            df.loc[mask, "highScore"] = time
     else:
         df.loc[len(df)] = [currentLevel, currentName, time]
 
