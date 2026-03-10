@@ -18,8 +18,8 @@ class block:
         self.momentumX = 0
         self.momentumY = 0
     
-    def draw(self, cameraPos):
-        pygame.draw.rect(main.screen, self.color, pygame.Rect(round(self.x) - cameraPos[0], round(self.y) - cameraPos[1], self.width, self.height))
+    def draw(self, cameraPos, sizing,xCenter,yCenter):
+        pygame.draw.rect(main.screen, self.color, pygame.Rect(round((self.x - cameraPos[0])*sizing)+xCenter, round((self.y - cameraPos[1])*sizing)+yCenter, round(self.width*sizing), round(self.height*sizing)))
 
     def move(self):
         self.x += self.momentumX
@@ -117,3 +117,9 @@ class block:
                     self.momentumY = -main.springs[i].power
                 elif(main.springs[i].type == "d"):
                     self.momentumY = main.springs[i].power
+    
+    def deathCheck(self):
+        for i in range(len(main.lavaList)):
+            if(self.y + self.height > main.lavaList[i].y and self.y < main.lavaList[i].y + main.lavaList[i].height and self.x + self.width > main.lavaList[i].x and self.x < main.lavaList[i].x + main.lavaList[i].width):
+                return True
+        return False

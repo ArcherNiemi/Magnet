@@ -29,6 +29,7 @@ blocks = []
 walls = []
 springs = []
 levelBox = []
+lavaList = []
 currentLevel = ""
 currentName = ""
 
@@ -37,16 +38,19 @@ cameraPos = [100, 100]
 def draw(endArea):
     screen.fill(BLUE)
 
-    endArea.draw(cameraPos)
+    endArea.draw(cameraPos,1,0,0)
 
     for i in range(len(walls)):
-        walls[i].draw(cameraPos)
+        walls[i].draw(cameraPos,1,0,0)
 
     for i in range(len(springs)):
-        springs[i].draw(cameraPos)
+        springs[i].draw(cameraPos,1,0,0)
 
     for i in range(len(blocks)):
-        blocks[i].draw(cameraPos)
+        blocks[i].draw(cameraPos,1,0,0)
+
+    for i in range(len(lavaList)):
+        lavaList[i].draw(cameraPos,1,0,0)
 
     pygame.display.flip()
 
@@ -73,7 +77,10 @@ def main(level, name):
                 if event.key == pygame.K_ESCAPE:
                     running = False
                 if event.key == pygame.K_r:
+                    running = False
                     resetGame()
+                if event.key == pygame.K_f:
+                    levelView()
     
         mouseButtons = pygame.mouse.get_pressed()
         if mouseButtons[0]:
@@ -86,6 +93,9 @@ def main(level, name):
             blocks[i].speedCap()
             blocks[i].move()
             blocks[i].checkBounds(levelBox)
+            if(blocks[i].deathCheck()):
+                running = False
+                resetGame()
             if(endArea.x < blocks[i].x + blocks[i].width and endArea.x + endArea.width > blocks[i].x and endArea.y < blocks[i].y + blocks[i].height and endArea.y + endArea.height > blocks[i].y):
                 endGameScreen(round(currentTime,2))
                 running = False
@@ -115,12 +125,14 @@ def setUpLevel():
     global springs
     global endArea
     global levelBox
+    global lavaList
     selectedLevel = getLevel(currentLevel)
     blocks = selectedLevel[0]
     walls = selectedLevel[1]
     springs = selectedLevel[2]
-    endArea = selectedLevel[3]
-    levelBox = selectedLevel[4]
+    lavaList = selectedLevel[3]
+    endArea = selectedLevel[4]
+    levelBox = selectedLevel[5]
 
 def adjustCamera():
     if(cameraPos[0] < 0):
@@ -151,6 +163,50 @@ def saveTime(time):
         df.loc[len(df)] = [currentLevel, currentName, time]
 
     df.to_csv(file_path, index=False)
+
+def levelView():
+    if(SCREEN_WIDTH / levelBox[0] < SCREEN_HEIGHT / levelBox[1]):
+        sizing = SCREEN_WIDTH / levelBox[0]
+        xCenter = 0
+        yCenter = (SCREEN_HEIGHT - round(levelBox[1]*sizing))/2
+    else:
+        sizing = SCREEN_HEIGHT / levelBox[1]
+        xCenter = (SCREEN_WIDTH - round(levelBox[0]*sizing))/2
+        yCenter = 0
+
+    screen.fill(LIGHT_BLUE)
+
+    pygame.draw.rect(screen, BLUE, pygame.Rect(xCenter,yCenter, round(levelBox[0]*sizing), round(levelBox[1]*sizing)))
+
+    endArea.draw([0,0],sizing, xCenter, yCenter)
+
+    for i in range(len(walls)):
+        walls[i].draw([0,0],sizing, xCenter, yCenter)
+
+    for i in range(len(springs)):
+        springs[i].draw([0,0],sizing, xCenter, yCenter)
+
+    for i in range(len(blocks)):
+        blocks[i].draw([0,0],sizing, xCenter, yCenter)
+
+    for i in range(len(lavaList)):
+        lavaList[i].draw([0,0],sizing, xCenter, yCenter)
+
+    pygame.display.flip()
+
+    running = True
+    while(running):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    running = False
+                if event.key == pygame.K_f:
+                    running = False
+    
+    
+
 
 if __name__ == "__main__":
     main("level 1")

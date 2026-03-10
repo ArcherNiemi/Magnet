@@ -10,5 +10,5 @@ class spring:
         self.power = power
         self.type = type
     
-    def draw(self, cameraPos):
-        pygame.draw.rect(main.screen, "orange", pygame.Rect(self.x - cameraPos[0], self.y - cameraPos[1], self.width, self.height))
+    def draw(self, cameraPos, sizing,xCenter,yCenter):
+        pygame.draw.rect(main.screen, "orange", pygame.Rect(round((self.x - cameraPos[0])*sizing)+xCenter, round((self.y - cameraPos[1])*sizing)+yCenter, round(self.width*sizing), round(self.height*sizing)))

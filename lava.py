@@ -1,7 +1,7 @@
 import main
 import pygame
 
-class end:
+class lava:
     def __init__(self, x, y, width, height):
         self.x = x
         self.y = y
@@ -9,4 +9,4 @@ class end:
         self.height = height
     
     def draw(self, cameraPos, sizing,xCenter,yCenter):
-        pygame.draw.rect(main.screen, "green", pygame.Rect(round((self.x - cameraPos[0])*sizing)+xCenter, round((self.y - cameraPos[1])*sizing)+yCenter, round(self.width*sizing), round(self.height*sizing)))
+        pygame.draw.rect(main.screen, "red", pygame.Rect(round((self.x - cameraPos[0])*sizing)+xCenter, round((self.y - cameraPos[1])*sizing)+yCenter, round(self.width*sizing), round(self.height*sizing)))

@@ -9,7 +9,7 @@ LIGHT_BLUE = (100, 150, 255)
 SKY_BLUE = (50, 75, 255)
 BLUE = (0,0,255)
 
-LEVELS = [["level 1", 1], ["level 2", 2], ["level 3", 3]]
+LEVELS = [["level 1", 1], ["level 2", 2], ["level 3", 3], ["level 4", 4], ["level 5", 5]]
 
 LEVEL_BOX_SIZE = 110
 SPACING = 20

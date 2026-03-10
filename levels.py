@@ -2,11 +2,13 @@ from block import block
 from end import end
 from wall import wall
 from spring import spring
+from lava import lava
 
 def getLevel(level):
     blocks = []
     walls = []
     springs = []
+    lavaList = []
 
     if(level == "level 1"):
         blocks.append(block(100, 100, 20, 20, "white", 0.2, 10))
@@ -64,5 +66,23 @@ def getLevel(level):
 
         endArea = end(1125,350,75,150)
         levelBox = [1200, 800]
+
+    elif(level == "level 4"):
+        blocks.append(block(75, 75, 20, 20, "white", 0.2, 10))
+
+        lavaList.append(lava(200, 200, 400, 400))
+
+        endArea = end(750,250,50,100)
+        levelBox = [800,600]
+
+    elif(level == "level 5"):
+        blocks.append(block(75, 75, 20, 20, "white", 0.2, 10))
+
+        for i in range(6):
+            lavaList.append(lava(i*1200+200, 200, 400, 400))
+            lavaList.append(lava(i*1200+800, 0, 400, 400))
+
+        endArea = end(7999,0,1,800)
+        levelBox = [8000,600]
     
-    return [blocks, walls, springs, endArea, levelBox]
+    return [blocks, walls, springs, lavaList, endArea, levelBox]
